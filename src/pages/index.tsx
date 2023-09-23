@@ -10,18 +10,24 @@ import { NextSeo } from "next-seo";
 import styled, { css } from "styled-components";
 
 import { Container, Layout } from "@/components/templates";
-import { ConnectButton } from "@/components/ConnectButton";
+
+import { NavBar } from "@/components/NavBar";
 import { useAccount } from "wagmi";
 import { useState, ChangeEvent } from "react";
+import Link from "next/link";
 
 export default function Home() {
   const { address, isConnected } = useAccount();
   const [postData, setPostData] = useState(null);
   const [inputAddress, setInputAddress] = useState("");
   const [inputLabel, setInputLabel] = useState("");
+  const [isValid, setIsValid] = useState(false);
 
   const handleAddressChange = (event: ChangeEvent<HTMLInputElement>) => {
     setInputAddress(event.target.value);
+    setIsValid(
+      event.target.value.startsWith("0x") && event.target.value.length === 42
+    );
   };
 
   const handleLabelChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -60,43 +66,49 @@ export default function Home() {
   return (
     <>
       <NextSeo title="Home" />
-
+      <header>
+        <NavBar />
+      </header>
       <Layout>
         {/* Placeholder for the header */}
-        <header>
-          <ConnectButton></ConnectButton>
-        </header>
 
         {/* Main content */}
         <Container as="main" $variant="flexVerticalCenter" $width="large">
-          <Heading level="1">Label Maker Pro {isConnected}</Heading>
+          <Typography className="max-w-sm text-center">
+            Address book for Ethereum addresses.
+          </Typography>
 
-          <div className="grid grid-cols-7 gap-4">
-            <div className="col-span-4">
+          <div className="flex-col gap-12 ">
+            <div className="pb-8 pt-8 w-[450px]">
               <Input
-                label="Eth Address"
+                label="ETH Address"
                 placeholder="0xA0Cf…251e"
                 value={inputAddress}
                 onChange={handleAddressChange}
               />
             </div>
-            <div className="col-span-3">
+            <div className="pb-8">
               <Input
-                label="Label"
+                label="Name"
                 placeholder="timelock.compound"
-                suffix="._lable.eth"
+                suffix="._label.eth"
                 value={inputLabel}
                 onChange={handleLabelChange}
               />
             </div>
-            <div className="col-start-1 col-end-8 flex justify-center items-center ">
+            <div className="px-8 flex justify-center items-center ">
               <Button
                 onClick={assignLabel}
-                className="max-w-[256px] "
-                disabled={!isConnected}
+                className="max-w-[256px]"
+                disabled={!isConnected || !isValid}
               >
-                {!isConnected && <div>Connect To Assign</div>}
-                {isConnected && <div>Assign Label</div>}
+                {!isConnected ? (
+                  <div>Connect To Label</div>
+                ) : !isValid ? (
+                  <div>Address Invalid</div>
+                ) : (
+                  <div>Assign Label</div>
+                )}
               </Button>
               {postData && <div>{JSON.stringify(postData)}</div>}
             </div>
@@ -108,25 +120,3 @@ export default function Home() {
     </>
   );
 }
-
-const SvgWrapper = styled.div(
-  ({ theme }) => css`
-    --size: ${theme.space["16"]};
-    width: var(--size);
-    height: var(--size);
-
-    svg {
-      width: 100%;
-      height: 100%;
-    }
-  `
-);
-
-const ExamplesGrid = styled.div(
-  ({ theme }) => css`
-    width: 100%;
-    display: grid;
-    gap: ${theme.space["4"]};
-    grid-template-columns: repeat(auto-fit, minmax(${theme.space["64"]}, 1fr));
-  `
-);
