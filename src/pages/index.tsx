@@ -5,25 +5,30 @@ import {
   Heading,
   Typography,
   Input,
-  MagnifyingGlassSimpleSVG,
 } from "@ensdomains/thorin";
 import { NextSeo } from "next-seo";
 import styled, { css } from "styled-components";
 
 import { Container, Layout } from "@/components/templates";
+import { ConnectButton } from "@/components/ConnectButton";
+import { useAccount } from "wagmi";
 
 export default function Home() {
+  const { address, isConnected } = useAccount();
+  console.log(isConnected);
+
   return (
     <>
       <NextSeo title="Home" />
 
       <Layout>
         {/* Placeholder for the header */}
+        <ConnectButton></ConnectButton>
         <header />
 
         {/* Main content */}
         <Container as="main" $variant="flexVerticalCenter" $width="large">
-          <Heading level="1">Label Maker Pro</Heading>
+          <Heading level="1">Label Maker Pro {isConnected}</Heading>
 
           <div className="grid grid-cols-7 gap-4">
             <div className="col-span-4">
@@ -32,17 +37,18 @@ export default function Home() {
             <div className="col-span-3">
               <Input
                 label="Label"
-                placeholder="
-                timelock.compound"
+                placeholder="timelock.compound"
                 suffix="._lable.eth"
               />
             </div>
-            <div className="flex justify-center items-center ">
-              <Button>hi</Button>
+            <div className="col-start-1 col-end-8 flex justify-center items-center ">
+              <Button className="max-w-[256px] " disabled={!isConnected}>
+                {!isConnected && <div>Connect To Assign</div>}
+                {isConnected && <div>Assign Label</div>}
+              </Button>
             </div>
           </div>
         </Container>
-
         {/* Placeholder for the footer */}
         <footer />
       </Layout>
