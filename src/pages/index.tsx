@@ -1,8 +1,8 @@
-import { Button, Card, EnsSVG, Heading, Typography } from '@ensdomains/thorin'
-import { NextSeo } from 'next-seo'
-import styled, { css } from 'styled-components'
+import { Button, Card, EnsSVG, Heading, Typography } from "@ensdomains/thorin";
+import { NextSeo } from "next-seo";
+import styled, { css } from "styled-components";
 
-import { Container, Layout } from '@/components/templates'
+import { Container, Layout } from "@/components/templates";
 
 export default function Home() {
   return (
@@ -20,7 +20,15 @@ export default function Home() {
           </SvgWrapper>
 
           <Heading level="1">ENS Frontend Examples</Heading>
-
+          <div>
+            <p className="text-xs">This is extra small text.</p>
+            <p className="text-sm">This is small text.</p>
+            <p className="text-base">This is base text.</p>
+            <p className="text-lg">This is large text.</p>
+            <p className="text-xl">This is extra large text.</p>
+            <p className="text-2xl">This is 2x large text.</p>
+            {/* ... and so on */}
+          </div>
           <ExamplesGrid>
             <Card title="Name/Address Input">
               <Typography color="textSecondary">
@@ -48,12 +56,12 @@ export default function Home() {
         <footer />
       </Layout>
     </>
-  )
+  );
 }
 
 const SvgWrapper = styled.div(
   ({ theme }) => css`
-    --size: ${theme.space['16']};
+    --size: ${theme.space["16"]};
     width: var(--size);
     height: var(--size);
 
@@ -62,13 +70,13 @@ const SvgWrapper = styled.div(
       height: 100%;
     }
   `
-)
+);
 
 const ExamplesGrid = styled.div(
   ({ theme }) => css`
     width: 100%;
     display: grid;
-    gap: ${theme.space['4']};
-    grid-template-columns: repeat(auto-fit, minmax(${theme.space['64']}, 1fr));
+    gap: ${theme.space["4"]};
+    grid-template-columns: repeat(auto-fit, minmax(${theme.space["64"]}, 1fr));
   `
-)
+);
