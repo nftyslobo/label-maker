@@ -22,6 +22,8 @@ export default function Home() {
   const [inputAddress, setInputAddress] = useState("");
   const [inputLabel, setInputLabel] = useState("");
   const [isValid, setIsValid] = useState(false);
+  const [postedAddress, setPostedAddress] = useState("");
+  const [postedLabel, setPostedLabel] = useState("");
 
   const handleAddressChange = (event: ChangeEvent<HTMLInputElement>) => {
     setInputAddress(event.target.value);
@@ -36,8 +38,6 @@ export default function Home() {
 
   const assignLabel = async () => {
     try {
-      console.log(inputAddress);
-      console.log(inputLabel);
       const response = await fetch("/api/set-name", {
         method: "POST",
         headers: {
@@ -47,6 +47,9 @@ export default function Home() {
           domain: "_label.eth",
           name: inputLabel,
           address: inputAddress,
+          text_records: {
+            description: address,
+          },
         }),
       });
 
@@ -56,6 +59,9 @@ export default function Home() {
 
       const data = await response.json();
       setPostData(data);
+      setPostedAddress(inputAddress);
+      setPostedLabel(inputLabel);
+      setPostedLabel;
       setInputAddress("");
       setInputLabel("");
     } catch (error) {
@@ -70,8 +76,6 @@ export default function Home() {
         <NavBar />
       </header>
       <Layout>
-        {/* Placeholder for the header */}
-
         {/* Main content */}
         <Container as="main" $variant="flexVerticalCenter" $width="large">
           <Typography className="max-w-sm text-center">
@@ -96,25 +100,53 @@ export default function Home() {
                 onChange={handleLabelChange}
               />
             </div>
-            <div className="px-8 flex justify-center items-center ">
-              <Button
-                onClick={assignLabel}
-                className="max-w-[256px]"
-                disabled={!isConnected || !isValid}
-              >
-                {!isConnected ? (
-                  <div>Connect To Label</div>
-                ) : !isValid ? (
-                  <div>Address Invalid</div>
-                ) : (
-                  <div>Assign Label</div>
-                )}
-              </Button>
-              {postData && <div>{JSON.stringify(postData)}</div>}
-            </div>
+
+            <Button
+              onClick={assignLabel}
+              className="max-w-[256px] mx-auto"
+              disabled={!isConnected || !isValid}
+            >
+              {!isConnected ? (
+                <div>Connect To Label</div>
+              ) : !isValid ? (
+                <div>Address Invalid</div>
+              ) : (
+                <div>Assign Label</div>
+              )}
+            </Button>
+            {postData && postData.success === true && (
+              <div className="mx-auto flex-col gap-8">
+                <div className="text-center text-lg pt-4">
+                  ✨Success✨ <br />
+                </div>
+                <div className="pt-6">
+                  {" "}
+                  <Link
+                    href={`https://etherscan.io/name-lookup-search?id=${postedLabel}._label.eth`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button className="max-w-[256px] mx-auto">
+                      View On Etherscan
+                    </Button>{" "}
+                  </Link>
+                </div>
+                <div className="pt-6">
+                  <Link
+                    href={`https://app.ens.domains/${postedLabel}._label.eth`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button className="max-w-[256px] mx-auto">
+                      View On ENS
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
         </Container>
-        {/* Placeholder for the footer */}
+
         <footer />
       </Layout>
     </>

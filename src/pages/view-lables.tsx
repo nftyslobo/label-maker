@@ -69,6 +69,9 @@ function LabelsTable({ labels }) {
           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
             Address
           </th>
+          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Set By
+          </th>
         </tr>
       </thead>
       <tbody className="bg-white divide-y divide-gray-200">
@@ -87,6 +90,11 @@ function LabelsTable({ labels }) {
             <td className="px-6 py-4 whitespace-nowrap">
               <AddressTooltip tooltipText={label.address}>
                 {truncateAddress(label.address)}
+              </AddressTooltip>
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap">
+              <AddressTooltip tooltipText={label.text_records.description}>
+                {truncateAddress(label.text_records.description)}
               </AddressTooltip>
             </td>
           </tr>
