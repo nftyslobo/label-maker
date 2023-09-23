@@ -12,14 +12,26 @@ import styled, { css } from "styled-components";
 import { Container, Layout } from "@/components/templates";
 import { ConnectButton } from "@/components/ConnectButton";
 import { useAccount } from "wagmi";
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 
 export default function Home() {
   const { address, isConnected } = useAccount();
   const [postData, setPostData] = useState(null);
+  const [inputAddress, setInputAddress] = useState("");
+  const [inputLabel, setInputLabel] = useState("");
 
-  const handleButtonClick = async () => {
+  const handleAddressChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setInputAddress(event.target.value);
+  };
+
+  const handleLabelChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setInputLabel(event.target.value);
+  };
+
+  const assignLabel = async () => {
     try {
+      console.log(inputAddress);
+      console.log(inputLabel);
       const response = await fetch("/api/set-name", {
         method: "POST",
         headers: {
@@ -27,8 +39,8 @@ export default function Home() {
         },
         body: JSON.stringify({
           domain: "_label.eth",
-          name: "frank",
-          address: "0x534631Bcf33BDb069fB20A93d2fdb9e4D4dD42CF",
+          name: inputLabel,
+          address: inputAddress,
         }),
       });
 
@@ -38,6 +50,8 @@ export default function Home() {
 
       const data = await response.json();
       setPostData(data);
+      setInputAddress("");
+      setInputLabel("");
     } catch (error) {
       console.error("There was an error!", error);
     }
@@ -49,32 +63,42 @@ export default function Home() {
 
       <Layout>
         {/* Placeholder for the header */}
-        <ConnectButton></ConnectButton>
-        <header />
+        <header>
+          <ConnectButton></ConnectButton>
+        </header>
 
         {/* Main content */}
         <Container as="main" $variant="flexVerticalCenter" $width="large">
           <Heading level="1">Label Maker Pro {isConnected}</Heading>
-          <div>
-            <Button onClick={handleButtonClick}>Send POST Request</Button>
-            {postData && <div>{JSON.stringify(postData)}</div>}
-          </div>
+
           <div className="grid grid-cols-7 gap-4">
             <div className="col-span-4">
-              <Input label="Eth Address" placeholder="0xA0Cf…251e" />
+              <Input
+                label="Eth Address"
+                placeholder="0xA0Cf…251e"
+                value={inputAddress}
+                onChange={handleAddressChange}
+              />
             </div>
             <div className="col-span-3">
               <Input
                 label="Label"
                 placeholder="timelock.compound"
                 suffix="._lable.eth"
+                value={inputLabel}
+                onChange={handleLabelChange}
               />
             </div>
             <div className="col-start-1 col-end-8 flex justify-center items-center ">
-              <Button className="max-w-[256px] " disabled={!isConnected}>
+              <Button
+                onClick={assignLabel}
+                className="max-w-[256px] "
+                disabled={!isConnected}
+              >
                 {!isConnected && <div>Connect To Assign</div>}
                 {isConnected && <div>Assign Label</div>}
               </Button>
+              {postData && <div>{JSON.stringify(postData)}</div>}
             </div>
           </div>
         </Container>
