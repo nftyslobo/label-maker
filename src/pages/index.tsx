@@ -1,4 +1,12 @@
-import { Button, Card, EnsSVG, Heading, Typography } from "@ensdomains/thorin";
+import {
+  Button,
+  Card,
+  EnsSVG,
+  Heading,
+  Typography,
+  Input,
+  MagnifyingGlassSimpleSVG,
+} from "@ensdomains/thorin";
 import { NextSeo } from "next-seo";
 import styled, { css } from "styled-components";
 
@@ -15,41 +23,24 @@ export default function Home() {
 
         {/* Main content */}
         <Container as="main" $variant="flexVerticalCenter" $width="large">
-          <SvgWrapper>
-            <EnsSVG />
-          </SvgWrapper>
+          <Heading level="1">Label Maker Pro</Heading>
 
-          <Heading level="1">ENS Frontend Examples</Heading>
-          <div>
-            <p className="text-xs">This is extra small text.</p>
-            <p className="text-sm">This is small text.</p>
-            <p className="text-base">This is base text.</p>
-            <p className="text-lg">This is large text.</p>
-            <p className="text-xl">This is extra large text.</p>
-            <p className="text-2xl">This is 2x large text.</p>
-            {/* ... and so on */}
+          <div className="grid grid-cols-7 gap-4">
+            <div className="col-span-4">
+              <Input label="Eth Address" placeholder="0xA0Cf…251e" />
+            </div>
+            <div className="col-span-3">
+              <Input
+                label="Label"
+                placeholder="
+                timelock.compound"
+                suffix="._lable.eth"
+              />
+            </div>
+            <div className="flex justify-center items-center ">
+              <Button>hi</Button>
+            </div>
           </div>
-          <ExamplesGrid>
-            <Card title="Name/Address Input">
-              <Typography color="textSecondary">
-                Every address input should also accept ENS names.
-              </Typography>
-
-              <Button as="a" href="/input">
-                View
-              </Button>
-            </Card>
-
-            <Card title="ENS Profile">
-              <Typography color="textSecondary">
-                Show the primary and avatar for an ENS name.
-              </Typography>
-
-              <Button as="a" href="/profile">
-                View
-              </Button>
-            </Card>
-          </ExamplesGrid>
         </Container>
 
         {/* Placeholder for the footer */}
