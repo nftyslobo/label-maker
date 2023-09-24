@@ -19,7 +19,7 @@ export default async function handler(
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: NAMESTONE_KEY,
+            Authorization: "ethglobal",
           },
           body: JSON.stringify(req.body),
         }

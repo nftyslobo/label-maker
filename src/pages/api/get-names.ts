@@ -24,7 +24,7 @@ export default async function handler(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: NAMESTONE_KEY,
+          Authorization: "ethglobal",
         },
       });
 
