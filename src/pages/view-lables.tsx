@@ -104,7 +104,12 @@ function LabelsTable({ labels }) {
   );
 }
 
-export function truncateAddress(address: string) {
+export function truncateAddress(address?: string) {
+  // Check if address is valid
+  if (!address || !/^0x[a-fA-F0-9]{40}$/.test(address)) {
+    address = "0x000000000000";
+  }
+
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 }
 
